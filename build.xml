@@ -1,0 +1,304 @@
+<project name="LeiBigTop" basedir="." default="build.jar">
+	<property environment="env" />
+	<property name="hadoop" value="${env.HADOOP_HOME}" />
+	<property name="groovy_home" value="${env.GROOVY_HOME}" />
+	<property name="hbase" value="${env.HBASE_HOME}" />
+	<property name="dest.dir" value="target" />
+	
+	<property name="dest.dir.classes" value="${dest.dir}/classes" />
+	<property name="dest.dir.release" value="${dest.dir}" />
+	<property name="target.name" value="LeiBigTop" />
+	<property name="target.version" value="1.1" />
+	<property name="target.jar" value="${target.name}-1.1.jar" />
+	
+	<path id="run.class.path">
+		<pathelement location="." />
+		<fileset dir="${hbase}/">
+			<include name="hbase-0.90.5.jar" />
+		</fileset>
+		<fileset dir="${hbase}/lib/">
+			<include name="zookeeper-3.3.2.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/lib/">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="lib">
+		 	<include name="**/*.jar" />	
+		</fileset>
+		<pathelement location="${dest.dir.release}/${target.jar}" />
+	</path>
+
+	<path id="build.class.path">
+		<pathelement location="." />
+		<fileset dir="${hbase}/">
+			<include name="hbase-0.90.5.jar" />
+		</fileset>
+		<fileset dir="${hbase}/lib/">
+			<include name="zookeeper-3.3.2.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/lib/">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="lib">
+		 	<include name="**/*.jar" />	
+		</fileset>
+	</path>
+	
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+	</target>
+	
+	<target name="compile">
+   		<echo>+---------------------------------------------------------+</echo>
+                <echo>+         Compiling                                       +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+                <echo>${hadoop}</echo>
+                <echo>${hbase}</echo>
+                <echo></echo>
+
+		<javac srcdir="src" destdir="${dest.dir.classes}"> 
+			<classpath refid="build.class.path" />
+		</javac>
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${dest.dir}" />
+		<mkdir dir="${dest.dir.classes}" />
+		<mkdir dir="${dest.dir.classes}/META-INF" />
+	</target>
+	
+	<target name="build.jar" depends="clean,prepare,compile">
+		<jar basedir="${dest.dir.classes}" destfile="${dest.dir.release}/${target.jar}" />
+	</target>
+	
+	<target name="runCountWarrantyCalls" depends="build.jar" description="run the default test">
+		<exec executable="hadoop" dir=".">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="com.lei.bigtop.hadoop.countwarrantycall.CountWarrantyCallJob"/>
+			<arg value="-DSVC_NAME=Warranty"/>
+			<arg value="-Dmain.config.file=/Users/lei/Documents/workspace/HadoopSample/conf/WarrantyDataCount.properties"/>
+			<arg value="/Users/lei/AppleDoc/Project_Warranty/Data/hadoopdata"/>
+			<arg value="/Users/lei/AppleDoc/Project_Warranty/Data/output"/>
+		</exec>
+   		<echo>+-------------------------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.countwarrantycall.CountWarrantyCallJob   +</echo>
+                <echo>+ Input: /Users/lei/AppleDoc/Project_Warranty/Data/hadoopdata             +</echo>
+                <echo>+ Input: /Users/lei/AppleDoc/Project_Warranty/Data/output                 +</echo>
+                <echo>+-------------------------------------------------------------------------+</echo>
+	</target>
+
+	<target name="runWordCounts" depends="build.jar" description="run the default test">
+		<exec executable="hadoop" dir=".">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="com.lei.bigtop.hadoop.wordcount.CountWordsV2"/>
+			<arg value="/Users/lei/work/hadoop-example/input"/>
+			<arg value="/Users/lei/work/hadoop-example/output"/>
+		</exec>
+   		<echo>+---------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.wordcount.CountWordsV2   +</echo>
+                <echo>+ Input: /Users/lei/work/hadoop-example/input             +</echo>
+                <echo>+ Input: /Users/lei/work/hadoop-example/output            +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+	</target>
+
+	<target name="calMovingAverage" depends="build.jar" description="calculate MovingAverage ">
+		<exec executable="hadoop" dir=".">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="com.lei.bigtop.hadoop.movingaverage.MovingAverageJob"/>
+			<arg value="/Users/lei/work/hadoop-example/movingaverage/input/goog_price_2.csv"/>
+			<arg value="/Users/lei/work/hadoop-example/movingaverage/output"/>
+		</exec>
+   		<echo>+----------------------------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.movingaverage.MovingAverageJob              +</echo>
+                <echo>+ Input: /Users/lei/work/hadoop-example/movingaverage/input/goog_price_2.csv +</echo>
+                <echo>+ Output: /Users/lei/work/hadoop-example/movingaverage/output                +</echo>
+                <echo>+----------------------------------------------------------------------------+</echo>
+	</target>
+
+	<target name="calMovingAvgTwo" depends="build.jar" description="calculate MovingAverage ">
+		<exec executable="hadoop" dir=".">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="com.lei.bigtop.hadoop.movingaverage.NoShuffleSort_MovingAverageJob"/>
+			<arg value="/Users/lei/work/hadoop-example/movingaverage/input/goog_price_2.csv"/>
+			<arg value="/Users/lei/work/hadoop-example/movingaverage/output"/>
+		</exec>
+   		<echo>+-----------------------------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.movingaverage.NoShuffleSort_MovingAverageJob +</echo>
+                <echo>+ Input: /Users/lei/work/hadoop-example/movingaverage/input/goog_price_2.csv  +</echo>
+                <echo>+ Output: /Users/lei/work/hadoop-example/movingaverage/output                 +</echo>
+                <echo>+-----------------------------------------------------------------------------+</echo>
+	</target>
+
+	<target name="runWordCountsWithArg" depends="build.jar" description="run the default test">
+		<exec executable="hadoop" dir=".">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="${mainclass}"/>
+                        <arg value="${input}"/>
+                        <arg value="${output}"/>
+		</exec>
+	</target>
+
+	<target name="runCountAvg" depends="build.jar" description="calculate count avg">
+		<exec executable="cp">
+			<arg value="./lib/json-lib-2.4-jdk15.jar"/>
+			<arg value="/usr/local//hadoop20/share/hadoop/lib/json-lib-2.4-jdk15.jar"/>
+		</exec>
+		<exec executable="cp">
+			<arg value="./lib/ezmorph-1.0.6.jar"/>
+			<arg value="/usr/local//hadoop20/share/hadoop/lib/ezmorph-1.0.6.jar"/>
+		</exec>
+		<exec executable="hadoop" dir=".">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="com.lei.hadoop.countavg.CountAvg"/>
+			<arg value="/Users/lei/Documents/workspace/LeiBigTop/data"/>
+			<arg value="/Users/lei/Documents/workspace/LeiBigTop/output"/>
+		</exec>
+		<exec executable="rm">
+			<arg value="/usr/local//hadoop20/share/hadoop/lib/json-lib-2.4-jdk15.jar"/>
+		</exec>
+		<exec executable="rm">
+			<arg value="/usr/local//hadoop20/share/hadoop/lib/ezmorph-1.0.6.jar"/>
+		</exec>
+   		<echo>+------------------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.hadoop.countavg.CountAvg                        +</echo>
+                <echo>+ Input: /Users/lei/Documents/workspace/LeiBigTop/data             +</echo>
+                <echo>+ Output: /Users/lei/Documents/workspace/LeiBigTop/output          +</echo>
+                <echo>+------------------------------------------------------------------+</echo>
+	</target>
+
+        <target name="runCalSumJSONJob" depends="build.jar" description="calculate count avg">
+                <exec executable="cp">
+                        <arg value="./lib/json-lib-2.4-jdk15.jar"/>
+                        <arg value="/usr/local//hadoop20/share/hadoop/lib/json-lib-2.4-jdk15.jar"/>
+                </exec>
+                <exec executable="cp">
+                        <arg value="./lib/ezmorph-1.0.6.jar"/>
+                        <arg value="/usr/local//hadoop20/share/hadoop/lib/ezmorph-1.0.6.jar"/>
+                </exec>
+                <exec executable="hadoop" dir=".">
+                        <arg value="jar"/>
+                        <arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+                        <arg value="com.lei.bigtop.hadoop.calsum.CalSumJSONJob"/>
+                        <arg value="/Users/lei/Documents/workspace/LeiBigTop/jsondata"/>
+                        <arg value="/Users/lei/Documents/workspace/LeiBigTop/output"/>
+                </exec>
+                <exec executable="rm">
+                        <arg value="/usr/local//hadoop20/share/hadoop/lib/json-lib-2.4-jdk15.jar"/>
+                </exec>
+                <exec executable="rm">
+                        <arg value="/usr/local//hadoop20/share/hadoop/lib/ezmorph-1.0.6.jar"/>
+                </exec>
+                <echo>+------------------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.calsum.CalSumJSONJob              +</echo>
+                <echo>+ Input: /Users/lei/Documents/workspace/LeiBigTop/jsondata         +</echo>
+                <echo>+ Output: /Users/lei/Documents/workspace/LeiBigTop/output          +</echo>
+                <echo>+------------------------------------------------------------------+</echo>
+        </target>
+
+        <target name="initHadoop" depends="" description="init Hdoop">
+                <echo>+---------------------------------------------------------+</echo>
+                <echo>+ Program: rm -rf /tmp/hadoop-lei/dfs                     +</echo>
+                <echo>+ Program: hadoop namenode -format                        +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+                <exec executable="rm">
+                        <arg value="-rf"/>
+                        <arg value="/tmp/hadoop-lei/dfs"/>
+                </exec>
+                <exec executable="hadoop" dir=".">
+                        <arg value="namenode"/>
+                        <arg value="-format"/>
+                </exec>
+        </target>
+
+  	<target name="checkEnv" depends="" description="check enviroment">
+		<echo>${hadoop}</echo>
+                <echo>+---------------------------------------------------------+</echo>
+                <echo>+ Program: rm -rf /tmp/hadoop-lei/dfs                     +</echo>
+                <echo>+ Program: hadoop namenode -format                        +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+        </target>
+
+       <target name="help" depends="" description="display help">
+                <echo>${hadoop}</echo>
+                <echo>+---------------------------------------------------------+</echo>
+                <echo>+ ant initHadoop                                          +</echo>
+                <echo>+ ant runCalSum                                           +</echo>
+                <echo>+ ant runCalSumJSONJob                                    +</echo>
+                <echo>+ ant runTestCalSum                                       +</echo>
+                <echo>+ ant runTestCalSumFromProp                               +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+        </target>
+
+        <target name="runCalSum" depends="build.jar" description="calculate sum">
+                <exec executable="hadoop" dir=".">
+                        <arg value="jar"/>
+                        <arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+                        <arg value="com.lei.bigtop.hadoop.calsum.CalSum"/>
+                        <arg value="./data"/>
+                        <arg value="./output"/>
+                </exec>
+                <echo>+------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.calsum.CalSum         +</echo>
+                <echo>+ Input: ./data                                        +</echo>
+                <echo>+ Output: ./output                                     +</echo>
+                <echo>+------------------------------------------------------+</echo>
+        </target>
+
+	<path id="groovy.classpath">
+                <fileset dir="${groovy_home}/lib/">
+                        <include name="*.jar" />
+                </fileset>
+        </path>
+
+	<taskdef name="groovy"
+         classname="org.codehaus.groovy.ant.Groovy"
+         classpathref="groovy.classpath"/>
+
+        <target name="runTestCalSum" depends="build.jar" description="calculate sum">
+		<groovy src="src/com/lei/bigtop/hadoop/test/RunHadoopTest.groovy">
+			<classpath>
+				<pathelement location="."/>
+				<fileset dir="lib">
+		 			<include name="**/*.jar" />	
+				</fileset>
+			</classpath>
+			<arg line="hadoop jar ./target/LeiBigTop-1.1.jar com.lei.bigtop.hadoop.calsum.CalSum ./data ./output"/>
+		</groovy>
+                <echo>+------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.calsum.CalSum         +</echo>
+                <echo>+ Input: ./data                                        +</echo>
+                <echo>+ Output: ./output                                     +</echo>
+                <echo>+------------------------------------------------------+</echo>
+        </target>
+
+      <target name="runTestCalSumFromProp" depends="build.jar" description="calculate sum">
+                <groovy src="src/com/lei/bigtop/hadoop/test/RunHadoopTestFromPropFile.groovy">
+                        <classpath>
+                                <pathelement location="."/>
+                                <fileset dir="lib">
+                                        <include name="**/*.jar" />
+                                </fileset>
+                        </classpath>
+                </groovy>
+                <echo>+------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.calsum.CalSum         +</echo>
+                <echo>+ Input: ./data                                        +</echo>
+                <echo>+ Output: ./output                                     +</echo>
+                <echo>+------------------------------------------------------+</echo>
+        </target>
+
+
+
+</project>

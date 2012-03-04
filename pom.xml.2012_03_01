@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.lei.bigtop</groupId>
+  <artifactId>LeiBigTop</artifactId>
+  <version>1.1</version>
+  <packaging>jar</packaging>
+
+  <name>LeiBigTop</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+	<dependency>
+		<groupId>junit</groupId>
+      		<artifactId>junit</artifactId>
+      		<version>3.8.1</version>
+      		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.hadoop</groupId>
+		<artifactId>hadoop-core</artifactId>
+		<version>0.20.205.0</version>
+	</dependency>
+  </dependencies>
+
+   <build>  
+
+	<sourceDirectory>src</sourceDirectory>
+	<directory>target</directory>
+
+     <plugins>  
+	<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+		<version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+	</plugin>
+
+	<plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <configuration>
+              <tasks>
+                <!--
+                  Place any Ant task here. You can add anything
+                  you can add between <target> and </target> in a
+                  build.xml.
+                -->
+
+                <!--
+		<exec executable="bin/hadoop" dir="/usr/local/hadoop20">
+			<arg value="jar"/>
+			<arg value="${project.basedir}/target/${project.build.finalName}.${project.packaging}"/>
+			<arg value="/Users/lei/Documents/workspace/LeiBigTop/target/LeiBigTop-1.1.jar"/>
+			<arg value="com.lei.bigtop.hadoop.wordcount.CountWordsV2"/>
+			<arg value="/Users/lei/work/hadoop-example/input"/>
+			<arg value="/Users/lei/work/hadoop-example/output"/>
+		</exec>
+                -->
+
+                <exec executable="hadoop" dir=".">
+                        <arg value="jar"/>
+                        <arg value="${project.basedir}/target/${project.build.finalName}.${project.packaging}"/>
+                        <arg value="com.lei.bigtop.hadoop.calsum.CalSum"/>
+                        <arg value="./data"/>
+                        <arg value="./output"/>
+                </exec>
+                <echo>+------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.calsum.CalSum         +</echo>
+                <echo>+ Input: ./data                                        +</echo>
+                <echo>+ Output: ./output                                     +</echo>
+                <echo>+------------------------------------------------------+</echo>
+
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+	</plugin>
+     </plugins>  
+    </build>  
+
+</project>

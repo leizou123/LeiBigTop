@@ -1,0 +1,185 @@
+<project name="LeiBigTop" basedir="." default="build.jar">
+	<property environment="env" />
+	<property name="hadoop" value="${env.HADOOP_HOME}" />
+	<property name="hbase" value="${env.HBASE_HOME}" />
+	<property name="dest.dir" value="target" />
+	
+	<property name="dest.dir.classes" value="${dest.dir}/classes" />
+	<property name="dest.dir.release" value="${dest.dir}/release" />
+	<property name="target.name" value="LeiBigTop" />
+	<property name="target.version" value="1.1" />
+	<property name="target.jar" value="${target.name}-1.1.jar" />
+	
+	<path id="run.class.path">
+		<pathelement location="." />
+		<fileset dir="${hbase}/">
+			<include name="hbase-0.90.5.jar" />
+		</fileset>
+		<fileset dir="${hbase}/lib/">
+			<include name="zookeeper-3.3.2.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/lib/">
+			<include name="asm-3.2.jar" />
+			<include name="aspectjrt-1.6.5.jar" />
+			<include name="aspectjtools-1.6.5.jar" />
+			<include name="commons-beanutils-1.7.0.jar" />
+			<include name="commons-beanutils-core-1.8.0.jar" />
+			<include name="commons-cli-1.2.jar" />
+			<include name="commons-codec-1.4.jar" />
+			<include name="commons-collections-3.2.1.jar" />
+			<include name="commons-configuration-1.6.jar" />
+			<include name="commons-daemon-1.0.1.jar" />
+			<include name="commons-digester-1.8.jar" />
+			<include name="commons-el-1.0.jar" />
+			<include name="commons-httpclient-3.0.1.jar" />
+			<include name="commons-lang-2.4.jar" />
+			<include name="commons-logging-1.1.1.jar" />
+			<include name="commons-logging-api-1.0.4.jar" />
+			<include name="commons-math-2.1.jar" />
+			<include name="commons-net-1.4.1.jar" />
+			<include name="core-3.1.1.jar" />
+			<include name="hadoop-capacity-scheduler-0.20.205.0.jar" />
+			<include name="hadoop-fairscheduler-0.20.205.0.jar" />
+			<include name="hadoop-thriftfs-0.20.205.0.jar" />
+			<include name="hsqldb-1.8.0.10.jar" />
+			<include name="jackson-core-asl-1.0.1.jar" />
+			<include name="jackson-mapper-asl-1.0.1.jar" />
+			<include name="jasper-compiler-5.5.12.jar" />
+			<include name="jasper-runtime-5.5.12.jar" />
+			<include name="jdeb-0.8.jar" />
+			<include name="jersey-core-1.8.jar" />
+			<include name="jersey-json-1.8.jar" />
+			<include name="jersey-server-1.8.jar" />
+			<include name="jets3t-0.6.1.jar" />
+			<include name="jetty-6.1.26.jar" />
+			<include name="jetty-util-6.1.26.jar" />
+			<include name="jsch-0.1.42.jar" />
+			<include name="junit-4.5.jar" />
+			<include name="kfs-0.2.2.jar" />
+			<include name="log4j-1.2.15.jar" />
+			<include name="mockito-all-1.8.5.jar" />
+			<include name="oro-2.0.8.jar" />
+			<include name="servlet-api-2.5-20081211.jar" />
+			<include name="slf4j-api-1.4.3.jar" />
+			<include name="slf4j-log4j12-1.4.3.jar" />
+			<include name="xmlenc-0.52.jar" />
+			<include name="jsp-2.1/jsp-2.1.jar" />
+			<include name="jsp-2.1/jsp-api-2.1.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="${dest.dir.release}/${target.jar}" />
+	</path>
+
+	<path id="build.class.path">
+		<pathelement location="." />
+		<fileset dir="${hbase}/">
+			<include name="hbase-0.90.5.jar" />
+		</fileset>
+		<fileset dir="${hbase}/lib/">
+			<include name="zookeeper-3.3.2.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/lib/">
+			<include name="asm-3.2.jar" />
+			<include name="aspectjrt-1.6.5.jar" />
+			<include name="aspectjtools-1.6.5.jar" />
+			<include name="commons-beanutils-1.7.0.jar" />
+			<include name="commons-beanutils-core-1.8.0.jar" />
+			<include name="commons-cli-1.2.jar" />
+			<include name="commons-codec-1.4.jar" />
+			<include name="commons-collections-3.2.1.jar" />
+			<include name="commons-configuration-1.6.jar" />
+			<include name="commons-daemon-1.0.1.jar" />
+			<include name="commons-digester-1.8.jar" />
+			<include name="commons-el-1.0.jar" />
+			<include name="commons-httpclient-3.0.1.jar" />
+			<include name="commons-lang-2.4.jar" />
+			<include name="commons-logging-1.1.1.jar" />
+			<include name="commons-logging-api-1.0.4.jar" />
+			<include name="commons-math-2.1.jar" />
+			<include name="commons-net-1.4.1.jar" />
+			<include name="core-3.1.1.jar" />
+			<include name="hadoop-capacity-scheduler-0.20.205.0.jar" />
+			<include name="hadoop-fairscheduler-0.20.205.0.jar" />
+			<include name="hadoop-thriftfs-0.20.205.0.jar" />
+			<include name="hsqldb-1.8.0.10.jar" />
+			<include name="jackson-core-asl-1.0.1.jar" />
+			<include name="jackson-mapper-asl-1.0.1.jar" />
+			<include name="jasper-compiler-5.5.12.jar" />
+			<include name="jasper-runtime-5.5.12.jar" />
+			<include name="jdeb-0.8.jar" />
+			<include name="jersey-core-1.8.jar" />
+			<include name="jersey-json-1.8.jar" />
+			<include name="jersey-server-1.8.jar" />
+			<include name="jets3t-0.6.1.jar" />
+			<include name="jetty-6.1.26.jar" />
+			<include name="jetty-util-6.1.26.jar" />
+			<include name="jsch-0.1.42.jar" />
+			<include name="junit-4.5.jar" />
+			<include name="kfs-0.2.2.jar" />
+			<include name="log4j-1.2.15.jar" />
+			<include name="mockito-all-1.8.5.jar" />
+			<include name="oro-2.0.8.jar" />
+			<include name="servlet-api-2.5-20081211.jar" />
+			<include name="slf4j-api-1.4.3.jar" />
+			<include name="slf4j-log4j12-1.4.3.jar" />
+			<include name="xmlenc-0.52.jar" />
+			<include name="jsp-2.1/jsp-2.1.jar" />
+			<include name="jsp-2.1/jsp-api-2.1.jar" />
+		</fileset>
+		<fileset dir="${hadoop}/">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="clean">
+		<delete dir="${dest.dir}" />
+	</target>
+	
+	<target name="compile">
+   		<echo>+---------------------------------------------------------+</echo>
+                <echo>+         Compiling                                       +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+                <echo>${hadoop}</echo>
+                <echo>${hbase}</echo>
+                <echo></echo>
+
+		<javac srcdir="src" destdir="${dest.dir.classes}"> 
+			<classpath refid="build.class.path" />
+		</javac>
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${dest.dir}" />
+		<mkdir dir="${dest.dir.classes}" />
+		<mkdir dir="${dest.dir.release}" />
+		<mkdir dir="${dest.dir.classes}/META-INF" />
+	</target>
+	
+	<target name="build.jar" depends="clean,prepare,compile">
+		<jar basedir="${dest.dir.classes}" destfile="${dest.dir.release}/${target.jar}" />
+		<copy file="${dest.dir.release}/${target.jar}" todir="/tmp/1.jar"/>
+	</target>
+	
+	<target name="runWordCounts" depends="build.jar" description="run the default test">
+		<exec executable="bin/hadoop" dir="/usr/local/hadoop20">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="com.lei.bigtop.hadoop.wordcount.CountWordsV2"/>
+			<arg value="/Users/lei/work/hadoop-example/input"/>
+			<arg value="/Users/lei/work/hadoop-example/output"/>
+		</exec>
+	</target>
+
+	<target name="runWordCountsWithArg" depends="build.jar" description="run the default test">
+		<exec executable="bin/hadoop" dir="/usr/local/hadoop20">
+			<arg value="jar"/>
+			<arg value="${basedir}/${dest.dir.release}/${target.jar}"/>
+			<arg value="${mainclass}"/>
+                        <arg value="${input}"/>
+                        <arg value="${output}"/>
+		</exec>
+	</target>
+
+</project>
