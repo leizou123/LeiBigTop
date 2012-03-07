@@ -13,5 +13,6 @@
 	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
 	<classpathentry kind="lib" path="/Users/lei/Documents/workspace/LeiBigTop/lib/itest-common-0.3.0-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/Users/lei/Documents/workspace/LeiBigTop/lib/hadoop-test-0.20.205.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
