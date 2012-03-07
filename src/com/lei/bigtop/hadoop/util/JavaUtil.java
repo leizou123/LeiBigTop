@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,8 @@ public class JavaUtil {
 
 
 	public static Map <String, List<Double>> getKeyValueListFromDir(String dirName) {
-		Map <String, List<Double>> mapKeyValueList = new HashMap <String, List<Double>>();
+		Map <String, List<Double>> mapKeyValueList = new TreeMap <String, List<Double>>();
+		//Map <String, List<Double>> mapKeyValueList = new HashMap <String, List<Double>>();
 		BufferedReader in = null;
 		
 		try {
@@ -83,8 +85,10 @@ public class JavaUtil {
 						StringTokenizer st = new StringTokenizer(line);
 						String k = (String) st.nextElement();
 						Double d = Double.valueOf( (String)st.nextElement());
+						//System.out.println("" + k + " " + d);
 						List<Double> list = (mapKeyValueList.get(k)==null)?  new ArrayList<Double> () : mapKeyValueList.get(k);
 						list.add(d);
+						mapKeyValueList.put(k, list);
 					}
 					in.close();
 				}
@@ -113,11 +117,12 @@ public class JavaUtil {
 	}
 	
 	public static boolean compareKeyValueList(Map <String, List<Double>> source, Map <String, List<Double>> dest) {
-		  
+		
+		
 		if (source==null || dest==null) return false;
 		if ( source.keySet().size()!=dest.keySet().size() ) 
 			return false;
-			
+
 		Iterator<String> it = source.keySet().iterator();
 		while (it.hasNext()) {
 			String k = it.next();
@@ -130,6 +135,8 @@ public class JavaUtil {
 			double destSum = 0;
 			for (Double d : listDest)  destSum += d.doubleValue();
 			if (sourceSum!=destSum) return false;
+			
+			System.out.print("" + k + " " + sourceSum + " ");
 		}
 		
 		return true;
@@ -180,11 +187,11 @@ public class JavaUtil {
 	}
 	
 	static public int prepareLocalData (String pathName) {
-		System.out.println("current path [" + pathName + "]");
+		//System.out.println("current path [" + pathName + "]");
 		createDirectoryIfNotExists(pathName);
 		String fileName = pathName.endsWith( System.getProperty("file.separator") ) ? pathName+"input.txt" : pathName+System.getProperty("file.separator")+"input.txt";
 		String[] keys = new String[] {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l","m"};
-		System.out.println("data file [" + fileName + "]");
+		//System.out.println("data file [" + fileName + "]");
 		return prepareLocalData (fileName, keys, 300, 100);
 	}
 
@@ -229,11 +236,22 @@ public class JavaUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
+
 		if ( JavaUtil.compareFileContentSum("/Users/lei/Documents/workspace/LeiBigTop/data", "/Users/lei/Documents/workspace/LeiBigTop/output") ) {
 			System.out.println("SUCCESS");
 		} else {
 			System.out.println("FAIL");
 		}
-			
+		String str1 = "[a 941.0 b 1511.0 c 661.0 d 761.0 e 1123.0 f 927.0 g 1287.0 h 1003.0 i 1165.0 j 1155.0 k 888.0 l 1263.0 m 1149.0 ]";
+		String str2 = "[a	941.0, b	1511.0, c	661.0, d	761.0, e	1123.0, f	927.0, g	1287.0, h	1003.0, i	1165.0, j	1155.0, k	888.0, l	1263.0, m	1149.0]";
+		String s1 = str1.replaceAll("\\s", "");
+		String s2 = str2.replaceAll("\\s", "");
+		
+		String s3 = s2.replaceAll(",", "");
+		
+		System.out.println(s1);
+		System.out.println(s2);
+		System.out.println(s3);
+		
 	}
 }

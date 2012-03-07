@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bigtop-itest-suite>
+	<bigtop-itest-suite-test>
+		<test-name>Calculate summation in MR</test-name>
+		<test-desc>Here is simple MR test to calculate sum</test-desc>
+		<test-pre-integration-test>
+		</test-pre-integration-test>
+		<test-integration-test>
+            <command-set>
+            <command>hadoop jar ./target/LeiBigTop-1.1.jar com.lei.bigtop.hadoop.calsum.CalSum ./data ./output</command>
+            <command-comparator-type>com.lei.bigtop.hadoop.integration.test.ExtactComparatorIgnoreWhiteSpace</command-comparator-type>
+            <command-comparator-compare-to><![CDATA[ cat ./output/* ]]></command-comparator-compare-to>
+            </command-set>
+		</test-integration-test>
+		<test-post-integration-test>
+		</test-post-integration-test>
+        </bigtop-itest-suite-test>
+
+        <bigtop-itest-suite-test>
+            <test-name>calculate pi</test-name>
+            <test-desc>calculate pi using hadoop MR</test-desc>
+            <test-pre-integration-test>
+            </test-pre-integration-test>
+            <test-integration-test>
+                <command-set>
+                <command>hadoop jar $HADOOP_HOME/hadoop-examples-0.*.0.jar pi 5 5</command>
+                <command-comparator-type>org.apache.hadoop.cli.util.SubstringComparator</command-comparator-type>
+                <command-comparator-compare-to><![CDATA[echo "Pi is 3.68"]]></command-comparator-compare-to>
+                </command-set>
+            </test-integration-test>
+            <test-post-integration-test>
+            </test-post-integration-test>
+        </bigtop-itest-suite-test>
+
+
+        <bigtop-itest-suite-test>
+            <test-name>count word in MR</test-name>
+            <test-desc>count word in Hadoop MR</test-desc>
+            <test-pre-integration-test>
+                <command-set><command>rm -rf ./wordcount</command></command-set>
+                <command-set><command>rm -rf ./wordcount_out</command></command-set>
+                <command-set><command>mkdir ./wordcount</command></command-set>
+                <command-set><command><![CDATA[curl http://www.meetup.com/HandsOnProgrammingEvents/events/53837022/ | sed -e :a -e 's/<[^>]*>//g;/</N;//ba' | sed 's/&nbsp//g' | sed 's/^[ \t]*//;s/[ \t]*$//'  | sed '/^$/d' | sed '/"http[^"]*"/d' > ./wordcount/content]]></command></command-set>
+                <command-set><command>hadoop fs -mkdir /wordcount</command></command-set>
+                <command-set><command>hadoop fs -put ./wordcount/* /wordcount</command></command-set>
+            </test-pre-integration-test>
+                <test-integration-test>
+                    <command-set><command>hadoop jar $HADOOP_HOME/hadoop-examples-0.*.0.jar wordcount /wordcount /wordcount_out</command></command-set>
+                    <command-set><command>mkdir ./wordcount_out</command></command-set>
+                    <command-set><command>hadoop fs -get /wordcount_out/* ./wordcount_out</command></command-set>
+                    <command-set><command>hadoop fs -rmr /wordcount</command></command-set>
+                    <command-set><command>hadoop fs -rmr /wordcount_out/</command></command-set>
+                </test-integration-test>
+                <test-post-integration-test>
+                    <command-set>
+                    <command>cat ./wordcount_out/* | grep  Roman | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'</command>
+                    <command-comparator-type>com.lei.bigtop.hadoop.integration.test.ExtactComparatorIgnoreWhiteSpace</command-comparator-type>
+                    <command-comparator-compare-to><![CDATA[cat wordcount/* | grep -c Roman]]></command-comparator-compare-to>
+                    </command-set>
+                </test-post-integration-test>
+        </bigtop-itest-suite-test>
+
+</bigtop-itest-suite>

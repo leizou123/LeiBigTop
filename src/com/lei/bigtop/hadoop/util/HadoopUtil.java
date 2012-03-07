@@ -14,6 +14,8 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.JobConf;
 
+
+
 //com.lei.bigtop.hadoop.util.HadoopUtil
 public class HadoopUtil {
 

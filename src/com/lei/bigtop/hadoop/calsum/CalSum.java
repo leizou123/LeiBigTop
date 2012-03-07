@@ -15,8 +15,10 @@ import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import com.lei.bigtop.hadoop.util.HadoopUtil;
-import com.lei.bigtop.hadoop.util.JavaUtil;
+import com.lei.bigtop.hadoop.util.*;
+
+
+
 
 // http://www.cloudera.com/blog/2011/01/how-to-include-third-party-libraries-in-your-map-reduce-job/
 // com.lei.bigtop.hadoop.calsum.CalSum
@@ -59,6 +61,7 @@ public class CalSum extends Configured implements Tool {
 		 	
 		JobClient.runJob(conf);
 		HadoopUtil.copyHDFSDirToLocal (conf, outputDir, outputDir ) ;
+		
 		if ( JavaUtil.compareFileContentSum(inputDir, outputDir) )
 			return 0;
 		else {

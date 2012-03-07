@@ -1,8 +1,9 @@
 package com.lei.bigtop.hadoop.test
 
-import org.apache.bigtop.itest.shell.Shell;
+
 
 import org.apache.bigtop.itest.shell.Shell
+
 class RunHadoopTestFromPropFile {
 	static Shell sh = new Shell("/bin/bash -s");
 	
