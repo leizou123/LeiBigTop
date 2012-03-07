@@ -299,6 +299,24 @@
                 <echo>+------------------------------------------------------+</echo>
         </target>
 
+     <target name="runTestCalSumFromXML" depends="build.jar" description="calculate sum">
+                <groovy src="src/com/lei/bigtop/hadoop/test/RunHadoopTestFromXMLFile.groovy">
+                        <classpath>
+                                <pathelement location="."/>
+                                <fileset dir="target">
+                                        <include name="**/*.jar" />
+                                </fileset>
+                                <fileset dir="lib">
+                                        <include name="**/*.jar" />
+                                </fileset>
+                        </classpath>
+                </groovy>
+                <echo>+------------------------------------------------------+</echo>
+                <echo>+ Program: com.lei.bigtop.hadoop.calsum.CalSum         +</echo>
+                <echo>+ Input: ./data                                        +</echo>
+                <echo>+ Output: ./output                                     +</echo>
+                <echo>+------------------------------------------------------+</echo>
+        </target>
 
 
 </project>
