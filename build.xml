@@ -222,6 +222,22 @@
                 </exec>
         </target>
 
+        <target name="initHadoopVB" depends="" description="init Hdoop at VB">
+                <echo>+---------------------------------------------------------+</echo>
+                <echo>+ Program: rm -rf /home/lei/data/hadoop                   +</echo>
+                <echo>+ Program: hadoop namenode -format                        +</echo>
+                <echo>+---------------------------------------------------------+</echo>
+                <exec executable="rm">
+                        <arg value="-rf"/>
+                        <arg value="/home/lei/data/hadoop/name"/>
+                </exec>
+                <exec executable="hadoop" dir=".">
+                        <arg value="namenode"/>
+                        <arg value="-format"/>
+                </exec>
+        </target>
+
+
   	<target name="checkEnv" depends="" description="check enviroment">
 		<echo>${hadoop}</echo>
                 <echo>+---------------------------------------------------------+</echo>
@@ -234,6 +250,7 @@
                 <echo>${hadoop}</echo>
                 <echo>+---------------------------------------------------------+</echo>
                 <echo>+ ant initHadoop                                          +</echo>
+                <echo>+ ant initHadoopVB  # to init Hadoop at Virtual Box       +</echo>
                 <echo>+ ant runCalSum                                           +</echo>
                 <echo>+ ant runCalSumJSONJob                                    +</echo>
                 <echo>+ ant runTestCalSum                                       +</echo>
